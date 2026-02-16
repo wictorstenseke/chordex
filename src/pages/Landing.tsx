@@ -66,7 +66,7 @@ export function Landing() {
           </Button>
           <Button size="lg" variant="outline" asChild>
             <a
-              href="https://github.com/wictorstenseke/vite-react-fe"
+              href="https://github.com/wictorstenseke/chordex"
               target="_blank"
               rel="noopener noreferrer"
             >

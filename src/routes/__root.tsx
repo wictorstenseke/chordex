@@ -13,7 +13,7 @@ interface RootContainerProps {
 
 const RootContainer = ({ children }: RootContainerProps) => {
   return (
-    <ThemeProvider defaultMode="system" storageKey="vite-ui-theme">
+    <ThemeProvider defaultMode="system" storageKey="chordex-ui-theme">
       <TooltipProvider>
         <AppShell>{children}</AppShell>
       </TooltipProvider>
