@@ -1,26 +1,28 @@
-# React + Vite + TypeScript Boilerplate
+# Chordex
 
-A modern, production-ready React boilerplate with best practices built in.
+A clean, lightweight, offline-first web app for managing chord-based songs (ChordPro format), creating setlists, practicing, and sharing songs with others.
 
-## 🚀 Features
+## Vision
 
-- ⚡️ **Vite (Rolldown)** - Lightning fast build tool powered by Rust-based Rolldown bundler
-- ⚛️ **React 19** - Latest React with TypeScript
-- 🎨 **Tailwind CSS v4** - Utility-first CSS framework
-- 🧩 **shadcn/ui** - Beautiful, accessible components built on Radix UI primitives
-- 🛣️ **TanStack Router** - Type-safe file-based routing with auto-generated route tree
-- 🔄 **TanStack Query** - Powerful data fetching and caching
-- ✅ **Vitest** - Fast unit testing with coverage
-- 🔍 **ESLint** - Code linting with import ordering and unused imports detection
-- 💅 **Prettier** - Code formatting (integrated with ESLint)
-- 🤖 **GitHub Actions** - CI/CD pipeline
-- 📱 **Responsive** - Mobile-first design
+- **Simple & fast** – Minimal interface, no distractions, works fully offline
+- **ChordPro-native** – Edit songs in ChordPro format with live chord preview
+- **Setlists** – Create, reorder, and play setlists with drag & drop
+- **Player mode** – Large typography, swipe navigation, optional autoscroll
+- **Sharing** – Share songs and setlists via read-only links; save shared songs to your library
+- **Backup** – Export library as ZIP (.cho files + setlist JSON)
 
-### About Rolldown-Vite
+## Tech Stack
 
-This boilerplate uses [rolldown-vite](https://vite.dev/guide/migration#rolldown-migration) (aliased as `vite`), Vite's experimental Rust-based bundler that's 5-10x faster than the JavaScript bundler. It's a drop-in replacement providing identical API and significantly improved build performance.
+- **Vite + React 19 + TypeScript** – Fast build, strict typing
+- **Firebase** – Firestore (data), Auth (users)
+- **PWA** – Offline support; app shell cached, Firestore offline persistence
+- **TanStack Router** – Type-safe file-based routing
+- **TanStack Query** – Data fetching and caching
+- **Tailwind CSS v4** – Utility-first styling
+- **shadcn/ui** – Accessible components (Radix UI)
+- **Vitest** – Unit and component testing
 
-## 📦 Project Structure
+## Project Structure
 
 ```
 src/
@@ -29,24 +31,22 @@ src/
 │   │   └── AppShell.tsx      # Main layout wrapper
 │   └── ui/                    # shadcn/ui components
 ├── pages/
-│   └── Landing.tsx            # Single landing page
+│   └── Landing.tsx
 ├── routes/                    # TanStack Router routes
-│   ├── __root.tsx             # Root layout
-│   └── index.tsx              # / route
+│   ├── __root.tsx
+│   └── index.tsx
 ├── hooks/
-│   └── usePosts.ts            # Example query hooks
 ├── lib/
-│   ├── api.ts                 # API client with fetch wrapper
-│   ├── queryClient.ts         # TanStack Query configuration
-│   └── utils.ts               # Utility functions
+│   ├── api.ts
+│   ├── queryClient.ts
+│   └── utils.ts
 ├── types/
-│   └── api.ts                 # API type definitions
-├── router.tsx                 # Router configuration
-├── main.tsx                   # App entry point
-└── index.css                  # Global styles
+├── router.tsx
+├── main.tsx
+└── index.css
 ```
 
-## 🛠️ Getting Started
+## Getting Started
 
 ### Install dependencies
 
@@ -60,59 +60,50 @@ npm install
 npm run dev
 ```
 
-### Configure API base URL (optional)
-
-By default the demo client points to JSONPlaceholder:
-
-- `https://jsonplaceholder.typicode.com`
-
-To override it, set `VITE_API_BASE_URL` in your environment:
-
-```bash
-VITE_API_BASE_URL="https://api.example.com"
-```
-
 ### Build for production
 
 ```bash
 npm run build
 ```
 
-Build process runs type checking, linting, tests, and builds the app. Any failure stops the build.
+Build runs type checking, linting, tests, and the Vite build. Any failure stops the build.
 
-## 📝 Available Scripts
+## Available Scripts
 
-### Development
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start dev server with hot reload |
+| `npm run build` | Full production build (type-check, lint, test, build) |
+| `npm run preview` | Preview production build locally |
+| `npm run generate:routes` | Generate TanStack Router route tree |
+| `npm run type-check` | TypeScript type checking (generates routes first) |
+| `npm run lint` | ESLint |
+| `npm run lint:fix` | ESLint with auto-fix |
+| `npm run format` | Prettier format |
+| `npm run format:check` | Prettier check |
+| `npm run test` | Run tests once |
+| `npm run test:watch` | Tests in watch mode |
+| `npm run test:coverage` | Coverage report |
+| `npm run ci` | CI checks (type-check, lint, test) |
+| `npm run check` | Alias for `ci` |
+| `npm run check:full` | All checks including build |
 
-- `npm run dev` - Start dev server with hot reload
+## Modes (MVP)
 
-### Building
+- **Edit mode** – Create and edit songs (ChordPro), manage metadata (key, capo, tempo, tags)
+- **View mode** – Read songs with chords rendered above lyrics
+- **Player mode** – Large typography for performance; swipe/next song; optional autoscroll; dark/light
 
-- `npm run build` - Full production build (runs type-check, lint, test, then builds)
-- `npm run preview` - Preview production build locally
+## Firebase Setup
 
-### Type Checking & Linting
+Configure Firebase before running against Firestore and Auth:
 
-- `npm run generate:routes` - Generate TanStack Router route tree (auto-run by type-check)
-- `npm run type-check` - Run TypeScript type checking (generates routes first)
-- `npm run lint` - Check code with ESLint
-- `npm run lint:fix` - Fix ESLint issues automatically
-- `npm run format` - Format all files with Prettier
-- `npm run format:check` - Check if files are formatted correctly
+1. Create a Firebase project
+2. Enable Firestore and Authentication
+3. Add app config to environment (see `.env.example` when available)
+4. Enable Firestore offline persistence for offline-first behavior
 
-### Testing
-
-- `npm run test` - Run tests once
-- `npm run test:watch` - Run tests in watch mode
-- `npm run test:coverage` - Run tests with coverage report
-
-### Quality Checks
-
-- `npm run ci` - Run all quality checks (type-check, lint, test) - used in CI pipeline
-- `npm run check` - Alias for `ci`
-- `npm run check:full` - Run all checks including build (most comprehensive)
-
-## 🎨 Adding Components
+## Adding Components
 
 Add shadcn/ui components:
 
@@ -122,229 +113,56 @@ npx shadcn@latest add card
 npx shadcn@latest add dialog
 ```
 
-Components will be installed in `src/components/ui/`.
+Components install in `src/components/ui/`.
 
-## 🛣️ Adding Routes
+## Adding Routes
 
-TanStack Router uses file-based routing with automatic route tree generation.
+TanStack Router uses file-based routing. Create files in `src/routes/`; the route tree is auto-generated.
 
-1. Create a new file in `src/routes/`:
+- Route tree: `src/routeTree.gen.ts` (generated, git-ignored)
+- `prepare` script generates it on `npm install` / `npm ci`
+- Also generated during dev, type-check, and build
 
-```tsx
-// src/routes/about.tsx
-import { createFileRoute } from "@tanstack/react-router";
-
-export const Route = createFileRoute("/about")({
-  component: AboutPage,
-});
-
-function AboutPage() {
-  return <div>About Page</div>;
-}
-```
-
-2. The route tree is auto-generated:
-   - TanStack Router Vite plugin watches `src/routes/` for changes
-   - Generates `src/routeTree.gen.ts` automatically (git-ignored)
-   - **Automatic on install**: The `prepare` script ensures route tree is generated when you run `npm install` or `npm ci`
-   - No manual registration needed - just create route files and they work!
-
-**Note:** You don't need to manually run `generate:routes` - it happens automatically during development, before type-checking, and after installing dependencies.
-
-## 🔄 Data Fetching with TanStack Query
-
-TanStack Query is configured with sensible defaults for automatic caching, background refetching, and optimistic updates.
-
-### Query Configuration
-
-The global QueryClient is configured in `src/lib/queryClient.ts`:
-
-- **staleTime**: 5 minutes - data is fresh for this duration
-- **gcTime**: 30 minutes - unused data stays in cache
-- **retry**: 1 - queries retry once on failure
-- **refetchOnWindowFocus**: true - refetch when window regains focus
-- **refetchOnReconnect**: true - refetch when network reconnects
-
-### Creating Query Hooks
-
-Create custom hooks in `src/hooks/`:
-
-```tsx
-// src/hooks/usePosts.ts
-import { useQuery } from "@tanstack/react-query";
-import { postsApi } from "@/lib/api";
-
-export const usePostsQuery = (params?: PaginationParams) => {
-  return useQuery({
-    queryKey: ["posts", params],
-    queryFn: () => postsApi.getPosts(params),
-  });
-};
-```
-
-### Using Queries in Components
-
-```tsx
-import { usePostsQuery } from "@/hooks/usePosts";
-
-const MyComponent = () => {
-  const { data, isLoading, isError, error } = usePostsQuery();
-
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
-
-  return <div>{/* Render data */}</div>;
-};
-```
-
-### Mutations with Optimistic Updates
-
-```tsx
-import { useUpdatePostMutation } from "@/hooks/usePosts";
-
-const MyComponent = () => {
-  const updatePost = useUpdatePostMutation();
-
-  const handleUpdate = () => {
-    updatePost.mutate({
-      id: 1,
-      data: { title: "Updated Title" },
-    });
-  };
-
-  return <button onClick={handleUpdate}>Update</button>;
-};
-```
-
-### DevTools
-
-React Query Devtools are included in development mode. Click the floating icon to:
-
-- Inspect query cache
-- View query states
-- Manually trigger refetches
-- Debug query configurations
-
-The included query hook examples in `src/hooks/usePosts.ts` are ready to adapt
-to your own API resources.
-
-## 🎯 Layout System
-
-The `AppShell` component provides:
-
-- Sticky header with theme toggle
-- Responsive container (max-width + padding)
-- Consistent spacing across the app
-- Mobile-first responsive design
-- Footer
-
-The landing page uses this layout via the root route.
-
-## 🧪 Testing
-
-This project uses **Vitest** with **@testing-library/react** for comprehensive testing.
-
-### Running Tests
+## Testing
 
 ```bash
 npm test              # Run all tests
-npm run test:watch    # Run tests in watch mode
-npm run test:coverage # Generate coverage report
+npm run test:watch    # Watch mode
+npm run test:coverage # Coverage report
 ```
 
-### Test Files
+Tests use **Vitest** and **@testing-library/react**. Co-locate test files with `.test.tsx` / `.test.ts`.
 
-Create test files with `.test.tsx` or `.test.ts` extension, co-located with the code they test:
+## CI/CD
 
-```tsx
-// button.test.tsx
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+GitHub Actions (`.github/workflows/ci.yml`):
 
-import { Button } from "./button";
+- Runs on push/PR to main, master, develop
+- Type check, lint, test, build
 
-describe("Button", () => {
-  it("handles click events", async () => {
-    const handleClick = vi.fn();
-    const user = userEvent.setup();
-    
-    render(<Button onClick={handleClick}>Click me</Button>);
-    await user.click(screen.getByRole("button"));
-    
-    expect(handleClick).toHaveBeenCalledTimes(1);
-  });
-});
-```
+## Troubleshooting
 
-### Testing with React Query
+### Route tree not found
 
-For components using TanStack Query, use the provided test utilities:
+If you see `Cannot find module './routeTree.gen'`:
 
-```tsx
-import { renderWithQueryClient } from "@/test/utils";
+1. Run `npm install` (or `npm ci`) – `prepare` generates the route tree
+2. Or run `npm run generate:routes` manually
 
-it("fetches and displays data", async () => {
-  renderWithQueryClient(<MyComponent />);
-  
-  await waitFor(() => {
-    expect(screen.getByText("Data loaded")).toBeInTheDocument();
-  });
-});
-```
+The route tree file is git-ignored and generated fresh in each environment.
 
-📚 **[Complete Testing Guide](./docs/testing.md)** - Detailed testing strategies, patterns, and best practices
+## Learn More
 
-## 🔧 VS Code Setup
-
-Recommended extensions (auto-suggested when opening the project):
-
-- ESLint
-- Prettier
-- Tailwind CSS IntelliSense
-
-Settings are pre-configured for:
-
-- Format on save
-- Auto-fix ESLint issues
-- Consistent line endings
-
-## 🚀 CI/CD
-
-GitHub Actions workflow is included (`.github/workflows/ci.yml`):
-
-- Runs on push/PR to main/master/develop
-- Type checking
-- Linting
-- Testing
-- Building
-
-## 🔧 Troubleshooting
-
-### Route Tree Not Found Error
-
-If you see an error like `Cannot find module './routeTree.gen'`, the route tree file wasn't generated. This is fixed automatically by:
-
-1. **Fresh install**: Run `npm install` or `npm ci` - the `prepare` script will generate it
-2. **Manual generation**: Run `npm run generate:routes`
-3. **Build time**: Route tree is generated automatically before each build
-
-The route tree file (`src/routeTree.gen.ts`) is git-ignored, so it's always generated fresh in each environment.
-
-## 📚 Learn More
-
-- [Vite Documentation](https://vite.dev)
-- [React Documentation](https://react.dev)
+- [Vite](https://vite.dev)
+- [React](https://react.dev)
 - [TanStack Router](https://tanstack.com/router)
 - [TanStack Query](https://tanstack.com/query)
+- [Firebase](https://firebase.google.com/docs)
+- [ChordPro format](https://www.chordpro.org/)
 - [shadcn/ui](https://ui.shadcn.com)
 - [Tailwind CSS](https://tailwindcss.com)
 - [Vitest](https://vitest.dev)
 
-## 📄 License
+## License
 
 MIT
-
-## 🤝 Contributing
-
-Feel free to customize this boilerplate for your needs!
