@@ -12,6 +12,7 @@ interface UseAuthResult {
   user: FirebaseUser | null;
   isLoading: boolean;
   error: Error | null;
+  signInMocked: () => void;
 }
 
 /**
@@ -46,5 +47,11 @@ export const useAuth = (): UseAuthResult => {
     return () => unsubscribe();
   }, []);
 
-  return { user, isLoading, error };
+  const signInMocked = () => {
+    setUser({ uid: "mock-user-dev" } as FirebaseUser);
+    setError(null);
+    setIsLoading(false);
+  };
+
+  return { user, isLoading, error, signInMocked };
 };

@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from "@testing-library/react";
+import { act, renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
 import { getFirebaseAuth } from "@/lib/firebase";
@@ -32,6 +32,27 @@ describe("useAuth", () => {
     });
     expect(result.current.user).toBeNull();
     expect(mockOnAuthStateChanged).not.toHaveBeenCalled();
+  });
+
+  it("should set a mock user when signInMocked is called", async () => {
+    vi.mocked(getFirebaseAuth).mockReturnValue(null);
+
+    const { result } = renderHook(() => useAuth());
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+    expect(result.current.user).toBeNull();
+
+    act(() => {
+      result.current.signInMocked();
+    });
+
+    expect(result.current.user).toEqual(
+      expect.objectContaining({ uid: "mock-user-dev" })
+    );
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.error).toBeNull();
   });
 
   it("should set user when onAuthStateChanged fires with a user", async () => {

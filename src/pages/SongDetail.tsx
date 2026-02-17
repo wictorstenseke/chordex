@@ -16,11 +16,16 @@ interface SongDetailProps {
 }
 
 export function SongDetail({ songId }: SongDetailProps) {
-  const { user } = useAuth();
+  const { user, signInMocked } = useAuth();
   const { data: song, isLoading } = useSongQuery(songId);
 
   if (!user) {
-    return <p className="text-muted-foreground">Signing in...</p>;
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 py-12">
+        <p className="text-muted-foreground">Firebase not configured</p>
+        <Button onClick={signInMocked}>Sign in as mocked user</Button>
+      </div>
+    );
   }
 
   if (isLoading) {
