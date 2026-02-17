@@ -76,6 +76,8 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
+**Important:** The `environment` configuration is required for GitHub to properly track the deployment status. Without it, deployments will succeed but may not show the correct status on the repository page.
+
 ### 3. Add GitHub Pages Specific Files
 
 #### a. Create `.nojekyll` file
