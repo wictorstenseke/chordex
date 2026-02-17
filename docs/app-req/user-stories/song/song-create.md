@@ -1,4 +1,4 @@
-Status: TODO
+Status: DONE
 
 # Create Song
 
@@ -8,11 +8,11 @@ As a user, I want to create a new song so that I can add chord charts to my libr
 
 ## Acceptance criteria
 
-- [ ] UI to start creating a new song
-- [ ] Song saved to Firestore with required fields (ownerId, title, content, createdAt, updatedAt)
-- [ ] Optional metadata supported (artist, key, capo, tempo, tags)
-- [ ] New song appears in song list/library after creation
-- [ ] Redirect or navigate to edit mode after creation
+- [x] UI to start creating a new song
+- [x] Song saved to Firestore with required fields (ownerId, title, content, createdAt, updatedAt)
+- [x] Optional metadata supported (artist, key, capo, tempo, tags)
+- [x] New song appears in song list/library after creation
+- [x] Redirect or navigate to edit mode after creation
 
 ## Notes
 

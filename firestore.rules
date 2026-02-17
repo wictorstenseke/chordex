@@ -1,0 +1,27 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can only read/write their own user doc
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Songs: owner read/write; unlisted allows public read (for shared links)
+    match /songs/{songId} {
+      allow read: if request.auth != null && resource.data.ownerId == request.auth.uid
+        || resource.data.visibility == 'unlisted';
+      allow create: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.ownerId == request.auth.uid;
+    }
+
+    // Setlists: owner read/write; unlisted allows public read (for shared links)
+    match /setlists/{setlistId} {
+      allow read: if request.auth != null && resource.data.ownerId == request.auth.uid
+        || resource.data.visibility == 'unlisted';
+      allow create: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.ownerId == request.auth.uid;
+    }
+    // Phase 2: group permissions will override private ownership rules
+  }
+}

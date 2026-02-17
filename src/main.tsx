@@ -8,8 +8,11 @@ import { RouterProvider } from "@tanstack/react-router";
 
 import "./index.css";
 import { TooltipProvider } from "./components/ui/tooltip";
+import { initFirebase } from "./lib/firebase";
 import { queryClient } from "./lib/queryClient";
 import { router } from "./router";
+
+initFirebase();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

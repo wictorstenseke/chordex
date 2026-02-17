@@ -3,6 +3,7 @@ import { type ReactElement, type ReactNode } from "react";
 import { type RenderOptions, render } from "@testing-library/react";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createMemoryHistory, createRouter, RouterProvider } from "@tanstack/react-router";
 
 /**
  * Create a new QueryClient for testing with specific defaults
@@ -47,6 +48,31 @@ export function renderWithQueryClient(
   return {
     ...render(ui, { wrapper: createWrapper(queryClient), ...options }),
     queryClient,
+  };
+}
+
+/**
+ * Render the app at a given route with QueryClient and Router.
+ * Use for integration tests of route-level flows.
+ */
+export async function renderAppAt(
+  initialEntries: string[],
+  options?: Omit<RenderOptions, "wrapper">
+) {
+  const queryClient = createTestQueryClient();
+  const { routeTree } = await import("@/routeTree.gen");
+  const history = createMemoryHistory({ initialEntries });
+  const router = createRouter({ routeTree, history });
+
+  return {
+    ...render(
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>,
+      options
+    ),
+    queryClient,
+    router,
   };
 }
 

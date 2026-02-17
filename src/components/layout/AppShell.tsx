@@ -13,14 +13,17 @@ export function AppShell({ children }: AppShellProps) {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
         <div className="container mx-auto flex h-14 max-w-screen-2xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="mr-4 flex items-center gap-3">
+          <nav className="mr-4 flex items-center gap-6">
             <Link to="/" className="flex items-center space-x-2">
               <span className="font-semibold">Chordex</span>
             </Link>
-            <span className="hidden text-sm text-muted-foreground md:inline">
-              Song library & setlists
-            </span>
-          </div>
+            <Link
+              to="/songs"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Songs
+            </Link>
+          </nav>
           <div className="flex items-center gap-2">
             <ModeToggle />
           </div>
