@@ -32,7 +32,7 @@ vi.mock("@/lib/songs", () => ({
 }));
 
 vi.mock("@/hooks/useAuth", () => ({
-  useAuth: () => ({ user: mockUser, isLoading: false, error: null }),
+  useAuth: () => ({ user: mockUser, isLoading: false, error: null, signInMocked: vi.fn() }),
 }));
 
 describe("songs flow", () => {
