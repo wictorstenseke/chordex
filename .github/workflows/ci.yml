@@ -40,7 +40,12 @@ jobs:
         run: npm run ci
 
       - name: Build
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
         run: npx vite build
+
+      - name: Add .nojekyll file
+        run: touch ./dist/.nojekyll
 
       - name: Upload build artifacts
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'

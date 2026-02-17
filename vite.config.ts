@@ -8,11 +8,12 @@ import { TanStackRouterVite } from "@tanstack/router-vite-plugin";
 
 // Determine base path for deployment
 const getBasePath = () => {
+  // BASE_PATH environment variable takes precedence
   if (process.env.BASE_PATH) {
     return process.env.BASE_PATH;
   }
-  // Use /chordex/ for GitHub Pages in CI, otherwise root
-  return process.env.CI ? "/chordex/" : "/";
+  // Default to root path for local development
+  return "/";
 };
 
 // https://vite.dev/config/
