@@ -1,8 +1,6 @@
-# SongBook (Chordex) – Documentation
+# SongBook (Chordex) – User Stories
 
-## Requirements
-
-All user stories and acceptance criteria live in **`/docs/app-req/user-stories`**.
+## Structure
 
 - **Architecture**: `architecture/` (data-model, firebase-setup, offline-pwa)
 - **Song**: `song/` (create, edit, delete, duplicate, search, tag, live-preview)
@@ -16,9 +14,9 @@ All user stories and acceptance criteria live in **`/docs/app-req/user-stories`*
 
 ## Completed
 
-1. **Data model** – TypeScript types in `src/types/songbook.ts` for User, Song, Setlist matching the Firestore schema
-2. **Firebase setup** – Firestore + Auth initialized in `src/lib/firebase.ts`, config via `VITE_FIREBASE_*` env vars (see `.env.example`)
-3. **PWA / offline** – vite-plugin-pwa configured (manifest, service worker, app shell caching), Firestore IndexedDB persistence enabled
+1. **Data model** (`architecture/data-model.md`) – TypeScript types in `src/types/songbook.ts` for User, Song, Setlist matching the Firestore schema
+2. **Firebase setup** (`architecture/firebase-setup.md`) – Firestore + Auth initialized in `src/lib/firebase.ts`, config via `VITE_FIREBASE_*` env vars (see `.env.example`)
+3. **Offline PWA** (`architecture/offline-pwa.md`) – vite-plugin-pwa configured (manifest, service worker, app shell caching), Firestore IndexedDB persistence enabled
 
 ---
 
@@ -33,7 +31,7 @@ All user stories and acceptance criteria live in **`/docs/app-req/user-stories`*
 
 ### 2. Firestore security rules
 
-Implement rules per `user-stories/security/security-rules.md`:
+Implement rules per `security/security-rules.md`:
 - Users read/write only their own songs and setlists (`ownerId` match)
 - Shared links allow read-only access for unlisted documents
 

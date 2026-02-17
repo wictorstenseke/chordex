@@ -1,4 +1,4 @@
-Status: TODO
+Status: DONE
 
 # Data Model
 
@@ -8,10 +8,10 @@ As a developer, I want the Firestore schema for Users, Songs, and Setlists imple
 
 ## Acceptance criteria
 
-- [ ] `users/{uid}` collection: displayName, createdAt
-- [ ] `songs/{songId}` collection: ownerId, title, artist?, key?, capo?, tempo?, tags?, content (ChordPro), visibility, source?, createdAt, updatedAt
-- [ ] `setlists/{setlistId}` collection: ownerId, name, songIds (ordered), notes?, visibility, createdAt, updatedAt
-- [ ] TypeScript types match schema
+- [x] `users/{uid}` collection: displayName, createdAt
+- [x] `songs/{songId}` collection: ownerId, title, artist?, key?, capo?, tempo?, tags?, content (ChordPro), visibility, source?, createdAt, updatedAt
+- [x] `setlists/{setlistId}` collection: ownerId, name, songIds (ordered), notes?, visibility, createdAt, updatedAt
+- [x] TypeScript types match schema
 
 ## Notes
 

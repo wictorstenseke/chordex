@@ -1,4 +1,4 @@
-Status: TODO
+Status: DONE
 
 # Firebase Setup
 
@@ -8,12 +8,12 @@ As a developer, I want Firebase (Firestore + Auth) configured in the app so that
 
 ## Acceptance criteria
 
-- [ ] Firebase project created and app registered
-- [ ] Firestore database enabled
-- [ ] Authentication enabled (appropriate sign-in methods)
-- [ ] Firebase config wired into app via environment variables
-- [ ] Firestore SDK initialized in app
-- [ ] Auth SDK initialized in app
+- [ ] Firebase project created and app registered (manual – Firebase Console)
+- [ ] Firestore database enabled (manual – Firebase Console)
+- [ ] Authentication enabled (manual – Firebase Console)
+- [x] Firebase config wired into app via environment variables
+- [x] Firestore SDK initialized in app
+- [x] Auth SDK initialized in app
 
 ## Notes
 
