@@ -1,4 +1,4 @@
-Status: TODO
+Status: DONE
 
 # Security Rules
 
@@ -8,10 +8,10 @@ As a developer, I want Firestore and sharing security rules implemented so that 
 
 ## Acceptance criteria
 
-- [ ] Users can only read/write their own songs (ownerId match)
-- [ ] Users can only read/write their own setlists (ownerId match)
-- [ ] Shared links allow read-only access (unlisted visibility)
-- [ ] Group permissions override private ownership (Phase 2 – placeholder or note for later)
+- [x] Users can only read/write their own songs (ownerId match)
+- [x] Users can only read/write their own setlists (ownerId match)
+- [x] Shared links allow read-only access (unlisted visibility)
+- [x] Group permissions override private ownership (Phase 2 – placeholder in rules)
 
 ## Notes
 
