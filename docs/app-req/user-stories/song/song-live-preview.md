@@ -1,4 +1,4 @@
-Status: TODO
+Status: DONE
 
 # Live Preview (Chords Rendered Above Lyrics)
 
@@ -8,9 +8,9 @@ As a user, I want to see chords rendered above lyrics as I edit so that I can ve
 
 ## Acceptance criteria
 
-- [ ] Live preview pane or toggle when editing
+- [x] Live preview pane or toggle when editing
 - [x] ChordPro content parsed and chords rendered above lyrics
-- [ ] Preview updates as user edits
+- [x] Preview updates as user edits
 - [x] Rendered format matches view mode and player mode display
 
 ## Notes

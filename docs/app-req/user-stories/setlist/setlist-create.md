@@ -1,4 +1,4 @@
-Status: TODO
+Status: DONE
 
 # Create Setlist
 
@@ -8,11 +8,11 @@ As a user, I want to create a new setlist so that I can group songs for a practi
 
 ## Acceptance criteria
 
-- [ ] UI to create a new setlist
-- [ ] Setlist requires a name
-- [ ] Setlist saved to Firestore with ownerId, name, songIds (empty array), createdAt, updatedAt
-- [ ] New setlist appears in setlist list
-- [ ] Navigate to setlist detail for adding songs
+- [x] UI to create a new setlist
+- [x] Setlist requires a name
+- [x] Setlist saved (localStorage; Firestore when wired) with ownerId, name, songIds (empty array), createdAt, updatedAt
+- [x] New setlist appears in setlist list
+- [x] Navigate to setlist detail for adding songs
 
 ## Notes
 

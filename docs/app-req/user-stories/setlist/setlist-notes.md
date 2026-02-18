@@ -1,4 +1,4 @@
-Status: TODO
+Status: DONE
 
 # Setlist Notes
 
@@ -8,10 +8,10 @@ As a user, I want to add notes to a setlist (e.g., tempo, capo per song) so that
 
 ## Acceptance criteria
 
-- [ ] Notes field editable on setlist
-- [ ] Notes displayed in setlist view and/or player mode
-- [ ] notes persisted to Firestore
-- [ ] Supports free-form text (tempo/capo comments, cues, etc.)
+- [x] Notes field editable on setlist
+- [x] Notes displayed in setlist view and/or player mode
+- [x] notes persisted (localStorage; Firestore when wired)
+- [x] Supports free-form text (tempo/capo comments, cues, etc.)
 
 ## Notes
 

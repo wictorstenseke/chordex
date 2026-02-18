@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createSong as createSongFn,
   deleteSong as deleteSongFn,
+  duplicateSong as duplicateSongFn,
   getSong,
   getSongsForUser,
   updateSong as updateSongFn,
@@ -68,6 +69,19 @@ export const useDeleteSongMutation = (ownerId: string | undefined) => {
   return useMutation({
     mutationFn: (songId: string) => deleteSongFn(songId),
     onSettled: () => {
+      if (ownerId) {
+        void queryClient.invalidateQueries({ queryKey: songKeys.list(ownerId) });
+      }
+    },
+  });
+};
+
+export const useDuplicateSongMutation = (ownerId: string | undefined) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (songId: string) => duplicateSongFn(ownerId!, songId),
+    onSuccess: () => {
       if (ownerId) {
         void queryClient.invalidateQueries({ queryKey: songKeys.list(ownerId) });
       }

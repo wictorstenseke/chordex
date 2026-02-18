@@ -1,10 +1,19 @@
 import { useState } from "react";
 
-import { Eye, FileText } from "lucide-react";
+import { Copy, Eye, FileText } from "lucide-react";
 
 import { Link, useNavigate } from "@tanstack/react-router";
 
 import { ChordProPreview } from "@/components/ChordProPreview";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,7 +23,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
-import { useDeleteSongMutation, useSongQuery } from "@/hooks/useSongs";
+import {
+  useDeleteSongMutation,
+  useDuplicateSongMutation,
+  useSongQuery,
+} from "@/hooks/useSongs";
 
 interface SongDetailProps {
   songId: string;
@@ -25,12 +38,27 @@ export function SongDetail({ songId }: SongDetailProps) {
   const { user, isLoading: authLoading } = useAuth();
   const { data: song, isLoading } = useSongQuery(songId);
   const deleteMutation = useDeleteSongMutation(user?.uid);
+  const duplicateMutation = useDuplicateSongMutation(user?.uid);
   const [isPreview, setIsPreview] = useState(true);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-  const handleDelete = () => {
+  const handleDeleteClick = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
     deleteMutation.mutate(songId, {
       onSuccess: () => {
+        setDeleteDialogOpen(false);
         navigate({ to: "/songs" });
+      },
+    });
+  };
+
+  const handleDuplicate = () => {
+    duplicateMutation.mutate(songId, {
+      onSuccess: (newId) => {
+        navigate({ to: "/songs/$songId/edit", params: { songId: newId } });
       },
     });
   };
@@ -74,8 +102,17 @@ export function SongDetail({ songId }: SongDetailProps) {
             </Link>
           </Button>
           <Button
+            variant="outline"
+            size="sm"
+            onClick={handleDuplicate}
+            disabled={duplicateMutation.isPending}
+          >
+            <Copy className="mr-1.5 h-4 w-4" />
+            {duplicateMutation.isPending ? "Duplicating..." : "Duplicate"}
+          </Button>
+          <Button
             variant="destructive"
-            onClick={handleDelete}
+            onClick={handleDeleteClick}
             disabled={deleteMutation.isPending}
           >
             {deleteMutation.isPending ? "Deleting..." : "Delete"}
@@ -132,6 +169,28 @@ export function SongDetail({ songId }: SongDetailProps) {
           )}
         </CardContent>
       </Card>
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete song?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete "{song.title}". This action cannot be
+              undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteConfirm}
+              disabled={deleteMutation.isPending}
+            >
+              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

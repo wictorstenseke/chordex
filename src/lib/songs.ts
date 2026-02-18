@@ -119,3 +119,22 @@ export const deleteSong = async (songId: string): Promise<void> => {
   const songs = readAll().filter((s) => s.id !== songId);
   writeAll(songs);
 };
+
+export const duplicateSong = async (
+  ownerId: string,
+  songId: string
+): Promise<string> => {
+  const source = readAll().find((s) => s.id === songId);
+  if (!source) throw new Error("Song not found");
+
+  const input: SongInput = {
+    title: source.title,
+    content: source.content,
+    artist: source.artist,
+    key: source.key,
+    capo: source.capo,
+    tempo: source.tempo,
+    tags: source.tags ? [...source.tags] : undefined,
+  };
+  return createSong(ownerId, input);
+};

@@ -1,4 +1,4 @@
-Status: TODO
+Status: DONE
 
 # Add Songs to Setlist
 
@@ -8,12 +8,12 @@ As a user, I want to add songs from my library to a setlist so that I can build 
 
 ## Acceptance criteria
 
-- [ ] UI to add songs when viewing/editing a setlist
-- [ ] Song picker or list from user's library
-- [ ] Selected songs appended to setlist's songIds (preserving order)
-- [ ] Changes persisted to Firestore
-- [ ] Added songs visible in setlist immediately
+- [x] UI to add songs when viewing/editing a setlist
+- [x] Song picker or list from user's library
+- [x] Selected songs appended to setlist's songIds (preserving order)
+- [x] Changes persisted (localStorage; Firestore when wired)
+- [x] Added songs visible in setlist immediately
 
 ## Notes
 
-songIds: string[] (ordered). Only songs from user's library (or shared songs they've saved) can be added.
+songIds: string[] (ordered). Only songs from user's library can be added.

@@ -14,23 +14,23 @@ User stories derived from [mvp-desc-scope.md](../mvp-desc-scope.md). Each story 
 
 | Story | Status |
 |-------|--------|
-| [Create song](./song/song-create.md) | TODO |
-| [Edit song](./song/song-edit.md) | TODO |
-| [Live preview](./song/song-live-preview.md) | TODO |
-| [Search songs](./song/song-search.md) | TODO |
-| [Tag songs](./song/song-tag.md) | TODO |
-| [Delete song](./song/song-delete.md) | TODO |
-| [Duplicate song](./song/song-duplicate.md) | TODO |
+| [Create song](./song/song-create.md) | Done |
+| [Edit song](./song/song-edit.md) | Done |
+| [Live preview](./song/song-live-preview.md) | Done |
+| [Search songs](./song/song-search.md) | Done |
+| [Tag songs](./song/song-tag.md) | Done |
+| [Delete song](./song/song-delete.md) | Done |
+| [Duplicate song](./song/song-duplicate.md) | Done |
 
 ## Setlist
 
 | Story | Status |
 |-------|--------|
-| [Create setlist](./setlist/setlist-create.md) | TODO |
-| [Add songs to setlist](./setlist/setlist-add-songs.md) | TODO |
-| [Reorder songs](./setlist/setlist-reorder.md) | TODO |
-| [Setlist notes](./setlist/setlist-notes.md) | TODO |
-| [Setlist player mode](./setlist/setlist-player-mode.md) | TODO |
+| [Create setlist](./setlist/setlist-create.md) | Done |
+| [Add songs to setlist](./setlist/setlist-add-songs.md) | Done |
+| [Reorder songs](./setlist/setlist-reorder.md) | Done |
+| [Setlist notes](./setlist/setlist-notes.md) | Done |
+| [Setlist player mode](./setlist/setlist-player-mode.md) | Done |
 
 ## Player
 

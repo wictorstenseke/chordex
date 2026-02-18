@@ -19,7 +19,13 @@ export function AppShell({ children }: AppShellProps) {
               to="/songs"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
-              App
+              Songs
+            </Link>
+            <Link
+              to="/setlists"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Setlists
             </Link>
           </nav>
           <div className="flex items-center gap-2">

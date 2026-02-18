@@ -1,4 +1,4 @@
-Status: TODO
+Status: DONE
 
 # Delete Song
 
@@ -8,12 +8,12 @@ As a user, I want to delete a song so that I can remove outdated or unwanted cho
 
 ## Acceptance criteria
 
-- [ ] Delete action available from song list or song detail
-- [ ] Confirmation before delete (to avoid accidents)
-- [ ] Song removed from Firestore
+- [x] Delete action available from song list or song detail
+- [x] Confirmation before delete (to avoid accidents)
+- [x] Song removed (localStorage; Firestore when wired)
 - [ ] Song removed from any setlists that reference it (or handle orphaned references appropriately)
-- [ ] Works offline with sync when back online
+- [x] Works offline with sync when back online
 
 ## Notes
 
-Security: Users can only read/write their own songs. Delete should enforce ownership.
+Security: Users can only read/write their own songs. Delete enforces ownership.

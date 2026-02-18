@@ -1,4 +1,4 @@
-Status: TODO
+Status: DONE
 
 # Duplicate Song
 
@@ -8,11 +8,11 @@ As a user, I want to duplicate a song so that I can create variations (e.g., dif
 
 ## Acceptance criteria
 
-- [ ] Duplicate action available from song list or song detail
-- [ ] New song created with copied metadata and content
-- [ ] New song has new ID and is owned by current user
-- [ ] Duplicate does not copy source metadata (source is for shared-song imports only)
-- [ ] Redirect to edit mode for new song
+- [x] Duplicate action available from song list or song detail
+- [x] New song created with copied metadata and content
+- [x] New song has new ID and is owned by current user
+- [x] Duplicate does not copy source metadata (source is for shared-song imports only)
+- [x] Redirect to edit mode for new song
 
 ## Notes
 
