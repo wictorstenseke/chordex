@@ -1,5 +1,10 @@
+import { useState } from "react";
+
+import { Eye, FileText } from "lucide-react";
+
 import { Link, useNavigate } from "@tanstack/react-router";
 
+import { ChordProPreview } from "@/components/ChordProPreview";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,6 +25,7 @@ export function SongDetail({ songId }: SongDetailProps) {
   const { user, isLoading: authLoading } = useAuth();
   const { data: song, isLoading } = useSongQuery(songId);
   const deleteMutation = useDeleteSongMutation(user?.uid);
+  const [isPreview, setIsPreview] = useState(false);
 
   const handleDelete = () => {
     deleteMutation.mutate(songId, {
@@ -82,15 +88,48 @@ export function SongDetail({ songId }: SongDetailProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle>ChordPro content</CardTitle>
-          <CardDescription>
-            Song content in ChordPro format
-          </CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>
+                {isPreview ? "Preview" : "ChordPro content"}
+              </CardTitle>
+              <CardDescription>
+                {isPreview
+                  ? "Performance-friendly view"
+                  : "Song content in ChordPro format"}
+              </CardDescription>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsPreview((prev) => !prev)}
+              aria-label={isPreview ? "Show raw ChordPro" : "Show preview"}
+            >
+              {isPreview ? (
+                <>
+                  <FileText className="mr-1.5 h-4 w-4" />
+                  Edit view
+                </>
+              ) : (
+                <>
+                  <Eye className="mr-1.5 h-4 w-4" />
+                  Preview
+                </>
+              )}
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
-          <pre className="whitespace-pre-wrap rounded-md border bg-muted/50 p-4 font-mono text-sm">
-            {song.content || "(No content yet)"}
-          </pre>
+          {isPreview ? (
+            <ChordProPreview
+              content={song.content}
+              className="rounded-md border bg-muted/50 p-4"
+            />
+          ) : (
+            <pre className="whitespace-pre-wrap rounded-md border bg-muted/50 p-4 font-mono text-sm">
+              {song.content || "(No content yet)"}
+            </pre>
+          )}
         </CardContent>
       </Card>
     </div>
