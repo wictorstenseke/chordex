@@ -10,12 +10,14 @@ import {
   deleteSong,
   getSong,
   getSongsForUser,
+  updateSong,
 } from "@/lib/songs";
 import { createTestQueryClient } from "@/test/utils";
 
 import {
   useCreateSongMutation,
   useDeleteSongMutation,
+  useUpdateSongMutation,
   useSongQuery,
   useSongsQuery,
   songKeys,
@@ -26,6 +28,7 @@ vi.mock("@/lib/songs", () => ({
   deleteSong: vi.fn(),
   getSong: vi.fn(),
   getSongsForUser: vi.fn(),
+  updateSong: vi.fn(),
 }));
 
 describe("useSongs hooks", () => {
@@ -121,6 +124,30 @@ describe("useSongs hooks", () => {
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
       expect(createSong).toHaveBeenCalledWith("uid", input);
       expect(result.current.data).toBe("new-song-id");
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: songKeys.list("uid"),
+      });
+    });
+  });
+
+  describe("useUpdateSongMutation", () => {
+    it("should update a song and invalidate detail and list caches", async () => {
+      const input = { title: "Updated Song", content: "New content" };
+      vi.mocked(updateSong).mockResolvedValue(undefined);
+
+      const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
+
+      const { result } = renderHook(() => useUpdateSongMutation("uid"), {
+        wrapper: createWrapper(),
+      });
+
+      result.current.mutate({ songId: "song-1", input });
+
+      await waitFor(() => expect(result.current.isSuccess).toBe(true));
+      expect(updateSong).toHaveBeenCalledWith("song-1", input);
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: songKeys.detail("song-1"),
+      });
       expect(invalidateSpy).toHaveBeenCalledWith({
         queryKey: songKeys.list("uid"),
       });

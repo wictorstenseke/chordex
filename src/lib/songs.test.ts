@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { createSong, deleteSong, getSong, getSongsForUser } from "./songs";
+import { createSong, deleteSong, getSong, getSongsForUser, updateSong } from "./songs";
 
 describe("songs lib", () => {
   beforeEach(() => {
@@ -130,6 +130,69 @@ describe("songs lib", () => {
       const songs = await getSongsForUser("uid");
       expect(songs).toHaveLength(1);
       expect(songs[0].title).toBe("Keep");
+    });
+  });
+
+  describe("updateSong", () => {
+    it("should update a song's fields", async () => {
+      await createSong("uid", { title: "Original", content: "Old content" });
+
+      await updateSong("00000000-0000-0000-0000-000000000001", {
+        title: "Updated",
+        content: "New content",
+        artist: "New Artist",
+      });
+
+      const result = await getSong("00000000-0000-0000-0000-000000000001");
+      expect(result).not.toBeNull();
+      expect(result!.title).toBe("Updated");
+      expect(result!.content).toBe("New content");
+      expect(result!.artist).toBe("New Artist");
+    });
+
+    it("should update updatedAt timestamp", async () => {
+      await createSong("uid", { title: "Song", content: "" });
+
+      const before = await getSong("00000000-0000-0000-0000-000000000001");
+      const beforeUpdatedAt = before!.updatedAt;
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      await updateSong("00000000-0000-0000-0000-000000000001", {
+        title: "Song",
+        content: "Updated",
+      });
+
+      const after = await getSong("00000000-0000-0000-0000-000000000001");
+      expect(after!.updatedAt.getTime()).toBeGreaterThan(
+        beforeUpdatedAt.getTime()
+      );
+    });
+
+    it("should throw when song does not exist", async () => {
+      await expect(
+        updateSong("nonexistent", { title: "X", content: "" })
+      ).rejects.toThrow("Song not found");
+    });
+
+    it("should not affect other songs", async () => {
+      vi.mocked(crypto.randomUUID).mockReturnValueOnce(
+        "00000000-0000-0000-0000-00000000aaa1"
+      );
+      await createSong("uid", { title: "Keep", content: "keep" });
+      vi.mocked(crypto.randomUUID).mockReturnValueOnce(
+        "00000000-0000-0000-0000-00000000bbb2"
+      );
+      await createSong("uid", { title: "Change", content: "change" });
+
+      await updateSong("00000000-0000-0000-0000-00000000bbb2", {
+        title: "Changed",
+        content: "changed",
+      });
+
+      const kept = await getSong("00000000-0000-0000-0000-00000000aaa1");
+      expect(kept!.title).toBe("Keep");
+      expect(kept!.content).toBe("keep");
     });
   });
 });

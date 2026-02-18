@@ -1,12 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-import { SongDetail } from "@/pages/SongDetail";
+import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/songs/$songId")({
-  component: SongDetailRoute,
+  component: SongIdLayout,
 });
 
-function SongDetailRoute() {
-  const { songId } = Route.useParams();
-  return <SongDetail songId={songId} />;
+function SongIdLayout() {
+  return <Outlet />;
 }
