@@ -1,58 +1,56 @@
-import {
-  collection,
-  doc,
-  addDoc,
-  getDocs,
-  getDoc,
-  query,
-  where,
-  orderBy,
-  serverTimestamp,
-  type DocumentData,
-  type Timestamp,
-} from "firebase/firestore";
+import type { SongInput, SongWithId } from "@/types/songbook";
 
-import { getFirestoreDb } from "@/lib/firebase";
+const STORAGE_KEY = "chordex-songs";
 
-import type { Song, SongInput, SongWithId } from "@/types/songbook";
+interface StoredSong {
+  id: string;
+  ownerId: string;
+  title: string;
+  artist?: string;
+  key?: string;
+  capo?: number;
+  tempo?: number;
+  tags?: string[];
+  content: string;
+  visibility: "private" | "unlisted" | "group";
+  createdAt: string;
+  updatedAt: string;
+}
 
-const SONGS_COLLECTION = "songs";
+const readAll = (): StoredSong[] => {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return [];
+  return JSON.parse(raw) as StoredSong[];
+};
 
-const toSongWithId = (id: string, data: DocumentData): SongWithId => ({
-  id,
-  ownerId: data.ownerId,
-  title: data.title,
-  artist: data.artist,
-  key: data.key,
-  capo: data.capo,
-  tempo: data.tempo,
-  tags: data.tags,
-  content: data.content ?? "",
-  visibility: data.visibility ?? "private",
-  source: data.source
-    ? {
-        songId: data.source.songId,
-        ownerId: data.source.ownerId,
-        importedAt: (data.source.importedAt as Timestamp)?.toDate?.() ?? new Date(),
-      }
-    : undefined,
-  createdAt: (data.createdAt as Timestamp)?.toDate?.() ?? new Date(),
-  updatedAt: (data.updatedAt as Timestamp)?.toDate?.() ?? new Date(),
+const writeAll = (songs: StoredSong[]): void => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(songs));
+};
+
+const toSongWithId = (stored: StoredSong): SongWithId => ({
+  id: stored.id,
+  ownerId: stored.ownerId,
+  title: stored.title,
+  artist: stored.artist,
+  key: stored.key,
+  capo: stored.capo,
+  tempo: stored.tempo,
+  tags: stored.tags,
+  content: stored.content,
+  visibility: stored.visibility,
+  createdAt: new Date(stored.createdAt),
+  updatedAt: new Date(stored.updatedAt),
 });
 
 export const createSong = async (
   ownerId: string,
   input: SongInput
 ): Promise<string> => {
-  const db = getFirestoreDb();
-  if (!db) {
-    throw new Error("Firestore not configured");
-  }
+  const id = crypto.randomUUID();
+  const now = new Date().toISOString();
 
-  const songData: Omit<Song, "createdAt" | "updatedAt"> & {
-    createdAt: ReturnType<typeof serverTimestamp>;
-    updatedAt: ReturnType<typeof serverTimestamp>;
-  } = {
+  const stored: StoredSong = {
+    id,
     ownerId,
     title: input.title,
     content: input.content,
@@ -62,43 +60,38 @@ export const createSong = async (
     capo: input.capo,
     tempo: input.tempo,
     tags: input.tags,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
+    createdAt: now,
+    updatedAt: now,
   };
 
-  const ref = await addDoc(collection(db, SONGS_COLLECTION), songData);
-  return ref.id;
+  const songs = readAll();
+  songs.push(stored);
+  writeAll(songs);
+
+  return id;
 };
 
 export const getSongsForUser = async (
   ownerId: string
 ): Promise<SongWithId[]> => {
-  const db = getFirestoreDb();
-  if (!db) {
-    return [];
-  }
+  const songs = readAll()
+    .filter((s) => s.ownerId === ownerId)
+    .sort(
+      (a, b) =>
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    );
 
-  const q = query(
-    collection(db, SONGS_COLLECTION),
-    where("ownerId", "==", ownerId),
-    orderBy("updatedAt", "desc")
-  );
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map((d) => toSongWithId(d.id, d.data()));
+  return songs.map(toSongWithId);
 };
 
 export const getSong = async (
   songId: string
 ): Promise<SongWithId | null> => {
-  const db = getFirestoreDb();
-  if (!db) {
-    return null;
-  }
+  const found = readAll().find((s) => s.id === songId);
+  return found ? toSongWithId(found) : null;
+};
 
-  const ref = doc(db, SONGS_COLLECTION, songId);
-  const snap = await getDoc(ref);
-  if (!snap.exists()) {
-    return null;
-  }
-  return toSongWithId(snap.id, snap.data());
+export const deleteSong = async (songId: string): Promise<void> => {
+  const songs = readAll().filter((s) => s.id !== songId);
+  writeAll(songs);
 };

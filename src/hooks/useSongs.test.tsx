@@ -7,6 +7,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 
 import {
   createSong,
+  deleteSong,
   getSong,
   getSongsForUser,
 } from "@/lib/songs";
@@ -14,6 +15,7 @@ import { createTestQueryClient } from "@/test/utils";
 
 import {
   useCreateSongMutation,
+  useDeleteSongMutation,
   useSongQuery,
   useSongsQuery,
   songKeys,
@@ -21,6 +23,7 @@ import {
 
 vi.mock("@/lib/songs", () => ({
   createSong: vi.fn(),
+  deleteSong: vi.fn(),
   getSong: vi.fn(),
   getSongsForUser: vi.fn(),
 }));
@@ -118,6 +121,26 @@ describe("useSongs hooks", () => {
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
       expect(createSong).toHaveBeenCalledWith("uid", input);
       expect(result.current.data).toBe("new-song-id");
+      expect(invalidateSpy).toHaveBeenCalledWith({
+        queryKey: songKeys.list("uid"),
+      });
+    });
+  });
+
+  describe("useDeleteSongMutation", () => {
+    it("should delete a song and invalidate list cache", async () => {
+      vi.mocked(deleteSong).mockResolvedValue(undefined);
+
+      const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
+
+      const { result } = renderHook(() => useDeleteSongMutation("uid"), {
+        wrapper: createWrapper(),
+      });
+
+      result.current.mutate("song-to-delete");
+
+      await waitFor(() => expect(result.current.isSuccess).toBe(true));
+      expect(deleteSong).toHaveBeenCalledWith("song-to-delete");
       expect(invalidateSpy).toHaveBeenCalledWith({
         queryKey: songKeys.list("uid"),
       });
