@@ -1,4 +1,4 @@
-Status: TODO
+Status: Done
 
 # Open Shared Song (Read-Only)
 
@@ -8,12 +8,12 @@ As a recipient, I want to open a shared song link and view it in read-only mode 
 
 ## Acceptance criteria
 
-- [ ] Shared song opens from link without requiring sign-in (for unlisted)
-- [ ] Display in read-only mode – no edit controls
-- [ ] Banner: "Shared song – read-only"
-- [ ] Chords rendered above lyrics (view mode)
-- [ ] Primary action: "Save to My Songs"
-- [ ] If not authenticated: prompt "Sign in to save"
+- [x] Shared song opens from link without requiring sign-in (for unlisted)
+- [x] Display in read-only mode – no edit controls
+- [x] Banner: "Shared song – read-only"
+- [x] Chords rendered above lyrics (view mode)
+- [x] Primary action: "Save to My Songs"
+- [x] If not authenticated: prompt "Sign in to save"
 
 ## Notes
 
