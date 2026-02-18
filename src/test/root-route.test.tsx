@@ -85,7 +85,9 @@ describe("root route resilience", () => {
     expect(
       await screen.findByRole("heading", { name: /something went wrong/i })
     ).toBeInTheDocument();
-    expect(screen.getByText(/route render failed/i)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/route render failed/i)
+    ).toBeInTheDocument();
 
     await user.click(screen.getByRole("link", { name: /go to home/i }));
 
