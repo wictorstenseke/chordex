@@ -1,4 +1,4 @@
-Status: TODO
+Status: Done
 
 # Export Library
 
@@ -8,11 +8,11 @@ As a user, I want to export my library as a ZIP file so that I can backup my son
 
 ## Acceptance criteria
 
-- [ ] Export action generates downloadable ZIP
-- [ ] ZIP contains /songs/<title>.cho (ChordPro files)
-- [ ] ZIP contains /setlists/<name>.json
-- [ ] Optionally include library.json index (metadata)
-- [ ] All user's songs and setlists included
+- [x] Export action generates downloadable ZIP
+- [x] ZIP contains /songs/<title>.cho (ChordPro files)
+- [x] ZIP contains /setlists/<name>.json
+- [x] Optionally include library.json index (metadata)
+- [x] All user's songs and setlists included
 
 ## Notes
 
