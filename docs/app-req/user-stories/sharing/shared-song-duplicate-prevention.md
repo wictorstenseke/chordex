@@ -1,4 +1,4 @@
-Status: TODO
+Status: Done
 
 # Shared Song Duplicate Prevention
 
@@ -8,10 +8,10 @@ As a user who previously saved a shared song, I want to see "Open My Copy" inste
 
 ## Acceptance criteria
 
-- [ ] When opening a shared song, check if current user already has a copy (via source metadata)
-- [ ] If copy exists: show "Open My Copy" instead of "Save to My Songs"
-- [ ] "Open My Copy" navigates to user's existing song
-- [ ] No duplicate songs created for same shared source
+- [x] When opening a shared song, check if current user already has a copy (via source metadata)
+- [x] If copy exists: show "Open My Copy" instead of "Save to My Songs"
+- [x] "Open My Copy" navigates to user's existing song
+- [x] No duplicate songs created for same shared source
 
 ## Notes
 

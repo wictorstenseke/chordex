@@ -1,4 +1,4 @@
-Status: TODO
+Status: Done
 
 # Share Song via Link
 
@@ -8,10 +8,10 @@ As a user, I want to share a song via a read-only link so that others can view m
 
 ## Acceptance criteria
 
-- [ ] Share action generates a shareable link
-- [ ] Link allows read-only access (no edit) for recipients
-- [ ] Visibility: "unlisted" enables link sharing while keeping song out of public discovery
-- [ ] Link does not require recipient to sign in to view (for unlisted shares)
+- [x] Share action generates a shareable link
+- [x] Link allows read-only access (no edit) for recipients
+- [x] Visibility: "unlisted" enables link sharing while keeping song out of public discovery
+- [x] Link does not require recipient to sign in to view (for unlisted shares)
 
 ## Notes
 

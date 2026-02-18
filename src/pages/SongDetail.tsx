@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Copy, Eye, FileText } from "lucide-react";
+import { Copy, Eye, FileText, Play, Share2 } from "lucide-react";
 
 import { Link, useNavigate } from "@tanstack/react-router";
 
@@ -28,6 +28,7 @@ import {
   useDuplicateSongMutation,
   useSongQuery,
 } from "@/hooks/useSongs";
+import { buildShareSongUrl } from "@/lib/share-url";
 
 interface SongDetailProps {
   songId: string;
@@ -41,6 +42,7 @@ export function SongDetail({ songId }: SongDetailProps) {
   const duplicateMutation = useDuplicateSongMutation(user?.uid);
   const [isPreview, setIsPreview] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
 
   const handleDeleteClick = () => {
     setDeleteDialogOpen(true);
@@ -61,6 +63,28 @@ export function SongDetail({ songId }: SongDetailProps) {
         navigate({ to: "/songs/$songId/edit", params: { songId: newId } });
       },
     });
+  };
+
+  const handleShare = async () => {
+    if (!song) return;
+    const url = buildShareSongUrl({
+      title: song.title,
+      artist: song.artist,
+      key: song.key,
+      capo: song.capo,
+      tempo: song.tempo,
+      tags: song.tags,
+      content: song.content,
+      sourceSongId: song.id,
+      sourceOwnerId: song.ownerId,
+    });
+    try {
+      await navigator.clipboard.writeText(url);
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 2000);
+    } catch {
+      // Fallback: open in new window or show URL
+    }
   };
 
   if (authLoading) {
@@ -97,9 +121,24 @@ export function SongDetail({ songId }: SongDetailProps) {
         </div>
         <div className="flex gap-2">
           <Button asChild>
+            <Link to="/songs/$songId/player" params={{ songId }}>
+              <Play className="mr-1.5 h-4 w-4" />
+              Player mode
+            </Link>
+          </Button>
+          <Button asChild>
             <Link to="/songs/$songId/edit" params={{ songId }}>
               Edit
             </Link>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleShare}
+            aria-label={shareCopied ? "Link copied" : "Share song link"}
+          >
+            <Share2 className="mr-1.5 h-4 w-4" />
+            {shareCopied ? "Copied!" : "Share"}
           </Button>
           <Button
             variant="outline"

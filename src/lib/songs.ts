@@ -1,4 +1,4 @@
-import type { SongInput, SongWithId } from "@/types/songbook";
+import type { SongInput, SongSource, SongWithId } from "@/types/songbook";
 
 const STORAGE_KEY = "chordex-songs";
 
@@ -13,6 +13,7 @@ interface StoredSong {
   tags?: string[];
   content: string;
   visibility: "private" | "unlisted" | "group";
+  source?: { songId: string; ownerId: string; importedAt: string };
   createdAt: string;
   updatedAt: string;
 }
@@ -38,16 +39,28 @@ const toSongWithId = (stored: StoredSong): SongWithId => ({
   tags: stored.tags,
   content: stored.content,
   visibility: stored.visibility,
+  source: stored.source
+    ? {
+        songId: stored.source.songId,
+        ownerId: stored.source.ownerId,
+        importedAt: new Date(stored.source.importedAt),
+      }
+    : undefined,
   createdAt: new Date(stored.createdAt),
   updatedAt: new Date(stored.updatedAt),
 });
 
+export interface CreateSongInput extends SongInput {
+  source?: SongSource;
+}
+
 export const createSong = async (
   ownerId: string,
-  input: SongInput
+  input: SongInput | CreateSongInput
 ): Promise<string> => {
   const id = crypto.randomUUID();
   const now = new Date().toISOString();
+  const withSource = input as CreateSongInput;
 
   const stored: StoredSong = {
     id,
@@ -60,6 +73,13 @@ export const createSong = async (
     capo: input.capo,
     tempo: input.tempo,
     tags: input.tags,
+    source: withSource.source
+      ? {
+          songId: withSource.source.songId,
+          ownerId: withSource.source.ownerId,
+          importedAt: withSource.source.importedAt.toISOString(),
+        }
+      : undefined,
     createdAt: now,
     updatedAt: now,
   };
@@ -88,6 +108,20 @@ export const getSong = async (
   songId: string
 ): Promise<SongWithId | null> => {
   const found = readAll().find((s) => s.id === songId);
+  return found ? toSongWithId(found) : null;
+};
+
+export const getSongBySource = async (
+  ownerId: string,
+  sourceSongId: string,
+  sourceOwnerId: string
+): Promise<SongWithId | null> => {
+  const found = readAll().find(
+    (s) =>
+      s.ownerId === ownerId &&
+      s.source?.songId === sourceSongId &&
+      s.source?.ownerId === sourceOwnerId
+  );
   return found ? toSongWithId(found) : null;
 };
 

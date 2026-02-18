@@ -36,23 +36,23 @@ User stories derived from [mvp-desc-scope.md](../mvp-desc-scope.md). Each story 
 
 | Story | Status |
 |-------|--------|
-| [Player mode](./player/player-mode.md) | TODO |
+| [Player mode](./player/player-mode.md) | Done |
 
 ## Sharing
 
 | Story | Status |
 |-------|--------|
-| [Share song via link](./sharing/share-song-link.md) | TODO |
+| [Share song via link](./sharing/share-song-link.md) | Done |
 | [Share setlist via link](./sharing/share-setlist-link.md) | TODO |
-| [Open shared song](./sharing/shared-song-open.md) | TODO |
-| [Save shared song to My Songs](./sharing/shared-song-save.md) | TODO |
-| [Duplicate prevention](./sharing/shared-song-duplicate-prevention.md) | TODO |
+| [Open shared song](./sharing/shared-song-open.md) | Done |
+| [Save shared song to My Songs](./sharing/shared-song-save.md) | Done |
+| [Duplicate prevention](./sharing/shared-song-duplicate-prevention.md) | Done |
 
 ## Export
 
 | Story | Status |
 |-------|--------|
-| [Export library](./export/export-library.md) | TODO |
+| [Export library](./export/export-library.md) | Done |
 
 ## Security
 

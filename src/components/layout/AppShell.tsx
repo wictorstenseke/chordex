@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { Link } from "@tanstack/react-router";
 
+import { ExportButton } from "@/components/ExportButton";
 import { ModeToggle } from "@/components/mode-toggle";
 
 interface AppShellProps {
@@ -29,6 +30,7 @@ export function AppShell({ children }: AppShellProps) {
             </Link>
           </nav>
           <div className="flex items-center gap-2">
+            <ExportButton />
             <ModeToggle />
           </div>
         </div>
