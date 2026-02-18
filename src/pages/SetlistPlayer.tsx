@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 import { ChordProPreview } from "@/components/ChordProPreview";
+import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAuth } from "@/hooks/useAuth";
@@ -76,7 +77,9 @@ export function SetlistPlayer({ setlistId }: SetlistPlayerProps) {
             {currentIndex + 1} / {Math.max(1, currentSongIds.length)}
           </span>
         </div>
-        <div className="w-20" />
+        <div className="flex w-20 justify-end">
+          <ModeToggle />
+        </div>
       </header>
 
       <main className="flex flex-1 flex-col min-h-0">

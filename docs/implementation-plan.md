@@ -190,16 +190,19 @@ Implementation plan for Chordex MVP features. Firestore integration is intention
 
 **Files:** New player route, player component
 
-**Story update:** Mark DONE.
+**Story update:** Mark DONE. ✓
 
 ---
 
 ## Phase 4: Sharing, Export, Security (Later)
 
-Deferred to later phases:
-- Share song/setlist via link
+Implemented:
+- Share song via link (encoded in URL, localStorage-compatible)
 - Open shared song, save to My Songs, duplicate prevention
-- Export library
+- Export library as ZIP (songs as .cho, setlists as .json, library.json)
+
+Still deferred:
+- Share setlist via link
 - Security rules (Firestore)
 
 ---
@@ -220,5 +223,7 @@ Deferred to later phases:
 | 2.4   | Setlist Notes       | setlist/setlist-notes.md          |
 | 2.5   | Setlist Player      | setlist/setlist-player-mode.md    |
 | 3.1   | Player Mode         | player/player-mode.md             |
+| 4.1   | Export library      | export/export-library.md          |
+| 4.2   | Share song          | sharing/share-song-link.md, etc.  |
 
 **After each:** Update story file + README.md status.

@@ -1,4 +1,4 @@
-Status: TODO
+Status: Done
 
 # Player Mode
 
@@ -8,12 +8,12 @@ As a user, I want a player mode with large typography and easy navigation so tha
 
 ## Acceptance criteria
 
-- [ ] Large typography for readability
-- [ ] Swipe or next/previous button for song navigation
-- [ ] Optional autoscroll through lyrics
-- [ ] Dark/light mode toggle
-- [ ] Minimal UI – focus on content
-- [ ] Works for single song view and setlist flow
+- [x] Large typography for readability
+- [x] Swipe or next/previous button for song navigation
+- [x] Optional autoscroll through lyrics
+- [x] Dark/light mode toggle
+- [x] Minimal UI – focus on content
+- [x] Works for single song view and setlist flow
 
 ## Notes
 
