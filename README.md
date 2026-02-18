@@ -140,6 +140,8 @@ GitHub Actions (`.github/workflows/ci.yml`):
 - Runs on push/PR to main, master, develop
 - Type check, lint, test, build
 
+**Note**: To enable automatic workflow runs on pull requests without manual approval, see [GitHub Actions Setup](docs/github-actions-setup.md).
+
 ## Troubleshooting
 
 ### Route tree not found
