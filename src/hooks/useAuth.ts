@@ -8,28 +8,43 @@ import {
 
 import { getFirebaseAuth } from "@/lib/firebase";
 
+const LOCAL_USER_KEY = "chordex-local-user-id";
+
 interface UseAuthResult {
   user: FirebaseUser | null;
   isLoading: boolean;
   error: Error | null;
-  signInMocked: () => void;
 }
+
+const getOrCreateLocalUserId = (): string => {
+  const existing = localStorage.getItem(LOCAL_USER_KEY);
+  if (existing) return existing;
+  const id = crypto.randomUUID();
+  localStorage.setItem(LOCAL_USER_KEY, id);
+  return id;
+};
+
+const isFirebaseConfigured = (): boolean => getFirebaseAuth() !== null;
+
+const getInitialUser = (): FirebaseUser | null => {
+  if (isFirebaseConfigured()) return null;
+  const localId = getOrCreateLocalUserId();
+  return { uid: localId } as FirebaseUser;
+};
 
 /**
  * Auth state hook. When Firebase is configured and no user is signed in,
  * automatically signs in anonymously so the app can create songs/setlists.
+ * When Firebase is not configured, provides a localStorage-backed local user.
  */
 export const useAuth = (): UseAuthResult => {
-  const [user, setUser] = useState<FirebaseUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<FirebaseUser | null>(getInitialUser);
+  const [isLoading, setIsLoading] = useState(isFirebaseConfigured);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const auth = getFirebaseAuth();
-    if (!auth) {
-      queueMicrotask(() => setIsLoading(false));
-      return;
-    }
+    if (!auth) return;
 
     const unsubscribe = onAuthStateChanged(auth, (fbUser) => {
       if (fbUser) {
@@ -47,11 +62,5 @@ export const useAuth = (): UseAuthResult => {
     return () => unsubscribe();
   }, []);
 
-  const signInMocked = () => {
-    setUser({ uid: "mock-user-dev" } as FirebaseUser);
-    setError(null);
-    setIsLoading(false);
-  };
-
-  return { user, isLoading, error, signInMocked };
+  return { user, isLoading, error };
 };

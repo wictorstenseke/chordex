@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   createSong as createSongFn,
+  deleteSong as deleteSongFn,
   getSong,
   getSongsForUser,
 } from "@/lib/songs";
@@ -36,6 +37,19 @@ export const useCreateSongMutation = (ownerId: string | undefined) => {
   return useMutation({
     mutationFn: (input: SongInput) => createSongFn(ownerId!, input),
     onSuccess: () => {
+      if (ownerId) {
+        void queryClient.invalidateQueries({ queryKey: songKeys.list(ownerId) });
+      }
+    },
+  });
+};
+
+export const useDeleteSongMutation = (ownerId: string | undefined) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (songId: string) => deleteSongFn(songId),
+    onSettled: () => {
       if (ownerId) {
         void queryClient.invalidateQueries({ queryKey: songKeys.list(ownerId) });
       }

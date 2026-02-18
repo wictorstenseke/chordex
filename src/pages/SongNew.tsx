@@ -19,7 +19,7 @@ import type { SongInput } from "@/types/songbook";
 
 export function SongNew() {
   const navigate = useNavigate();
-  const { user, signInMocked } = useAuth();
+  const { user, isLoading } = useAuth();
   const createMutation = useCreateSongMutation(user?.uid);
 
   const [title, setTitle] = useState("");
@@ -43,13 +43,8 @@ export function SongNew() {
     });
   };
 
-  if (!user) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-4 py-12">
-        <p className="text-muted-foreground">Firebase not configured</p>
-        <Button onClick={signInMocked}>Sign in as mocked user</Button>
-      </div>
-    );
+  if (isLoading) {
+    return <p className="text-muted-foreground py-12 text-center">Loading...</p>;
   }
 
   return (

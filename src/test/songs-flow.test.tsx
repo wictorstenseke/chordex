@@ -2,9 +2,9 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
-import { getFirebaseAuth } from "@/lib/firebase";
 import {
   createSong,
+  deleteSong,
   getSong,
   getSongsForUser,
 } from "@/lib/songs";
@@ -14,31 +14,29 @@ import { renderAppAt } from "@/test/utils";
 const mockUser = { uid: "test-uid" };
 
 vi.mock("@/lib/firebase", () => ({
-  getFirebaseAuth: vi.fn(),
+  getFirebaseAuth: vi.fn(() => null),
 }));
 
 vi.mock("firebase/auth", () => ({
-  onAuthStateChanged: vi.fn((_auth: unknown, callback: (u: unknown) => void) => {
-    callback(mockUser);
-    return vi.fn();
-  }),
+  onAuthStateChanged: vi.fn(),
   signInAnonymously: vi.fn(),
 }));
 
 vi.mock("@/lib/songs", () => ({
   createSong: vi.fn(),
+  deleteSong: vi.fn(),
   getSong: vi.fn(),
   getSongsForUser: vi.fn(),
 }));
 
 vi.mock("@/hooks/useAuth", () => ({
-  useAuth: () => ({ user: mockUser, isLoading: false, error: null, signInMocked: vi.fn() }),
+  useAuth: () => ({ user: mockUser, isLoading: false, error: null }),
 }));
 
 describe("songs flow", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(getFirebaseAuth).mockReturnValue({} as never);
+    localStorage.clear();
   });
 
   describe("songs list", () => {
@@ -147,6 +145,7 @@ describe("songs flow", () => {
       expect(screen.getByText(/artist name/i)).toBeInTheDocument();
       expect(screen.getByText(/\[Verse 1\]/)).toBeInTheDocument();
       expect(screen.getByRole("link", { name: /back to songs/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /delete/i })).toBeInTheDocument();
     });
 
     it("should show not found when song does not exist", async () => {
@@ -158,6 +157,37 @@ describe("songs flow", () => {
         expect(screen.getByText(/song not found/i)).toBeInTheDocument();
       });
       expect(screen.getByRole("link", { name: /back to songs/i })).toBeInTheDocument();
+    });
+
+    it("should navigate to songs list after deleting a song", async () => {
+      vi.mocked(getSong).mockResolvedValue({
+        id: "song-del",
+        title: "Delete Me",
+        ownerId: "test-uid",
+        content: "",
+        visibility: "private",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      vi.mocked(deleteSong).mockResolvedValue(undefined);
+      vi.mocked(getSongsForUser).mockResolvedValue([]);
+
+      const user = userEvent.setup();
+      const { router } = await renderAppAt(["/songs/song-del"]);
+
+      await waitFor(() => {
+        expect(screen.getByRole("heading", { name: /delete me/i })).toBeInTheDocument();
+      });
+
+      await user.click(screen.getByRole("button", { name: /delete/i }));
+
+      await waitFor(() => {
+        expect(deleteSong).toHaveBeenCalledWith("song-del");
+      });
+
+      await waitFor(() => {
+        expect(router.state.location.pathname).toBe("/songs");
+      });
     });
   });
 });

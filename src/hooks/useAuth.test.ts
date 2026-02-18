@@ -1,4 +1,4 @@
-import { act, renderHook, waitFor } from "@testing-library/react";
+import { renderHook, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 
 import { getFirebaseAuth } from "@/lib/firebase";
@@ -20,9 +20,10 @@ vi.mock("firebase/auth", () => ({
 describe("useAuth", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    localStorage.clear();
   });
 
-  it("should set isLoading to false when Firebase is not configured", async () => {
+  it("should auto-create a local user when Firebase is not configured", async () => {
     vi.mocked(getFirebaseAuth).mockReturnValue(null);
 
     const { result } = renderHook(() => useAuth());
@@ -30,39 +31,30 @@ describe("useAuth", () => {
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
     });
-    expect(result.current.user).toBeNull();
+    expect(result.current.user).not.toBeNull();
+    expect(result.current.user!.uid).toBeTruthy();
     expect(mockOnAuthStateChanged).not.toHaveBeenCalled();
   });
 
-  it("should set a mock user when signInMocked is called", async () => {
+  it("should persist the local user ID across renders", async () => {
     vi.mocked(getFirebaseAuth).mockReturnValue(null);
 
-    const { result } = renderHook(() => useAuth());
+    const { result: result1 } = renderHook(() => useAuth());
+    await waitFor(() => expect(result1.current.isLoading).toBe(false));
+    const firstUid = result1.current.user!.uid;
 
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
-    });
-    expect(result.current.user).toBeNull();
+    const { result: result2 } = renderHook(() => useAuth());
+    await waitFor(() => expect(result2.current.isLoading).toBe(false));
 
-    act(() => {
-      result.current.signInMocked();
-    });
-
-    expect(result.current.user).toEqual(
-      expect.objectContaining({ uid: "mock-user-dev" })
-    );
-    expect(result.current.isLoading).toBe(false);
-    expect(result.current.error).toBeNull();
+    expect(result2.current.user!.uid).toBe(firstUid);
   });
 
   it("should set user when onAuthStateChanged fires with a user", async () => {
     const mockUser = { uid: "user-123" };
-    let authCallback: ((u: typeof mockUser | null) => void) | null = null;
 
     vi.mocked(getFirebaseAuth).mockReturnValue({} as never);
     mockOnAuthStateChanged.mockImplementation((_auth: unknown, cb: (u: unknown) => void) => {
-      authCallback = cb as (u: typeof mockUser | null) => void;
-      queueMicrotask(() => authCallback?.(mockUser));
+      queueMicrotask(() => cb(mockUser));
       return vi.fn();
     });
 

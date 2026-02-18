@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -9,23 +9,28 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
-import { useSongQuery } from "@/hooks/useSongs";
+import { useDeleteSongMutation, useSongQuery } from "@/hooks/useSongs";
 
 interface SongDetailProps {
   songId: string;
 }
 
 export function SongDetail({ songId }: SongDetailProps) {
-  const { user, signInMocked } = useAuth();
+  const navigate = useNavigate();
+  const { user, isLoading: authLoading } = useAuth();
   const { data: song, isLoading } = useSongQuery(songId);
+  const deleteMutation = useDeleteSongMutation(user?.uid);
 
-  if (!user) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-4 py-12">
-        <p className="text-muted-foreground">Firebase not configured</p>
-        <Button onClick={signInMocked}>Sign in as mocked user</Button>
-      </div>
-    );
+  const handleDelete = () => {
+    deleteMutation.mutate(songId, {
+      onSuccess: () => {
+        navigate({ to: "/songs" });
+      },
+    });
+  };
+
+  if (authLoading) {
+    return <p className="text-muted-foreground py-12 text-center">Loading...</p>;
   }
 
   if (isLoading) {
@@ -56,9 +61,18 @@ export function SongDetail({ songId }: SongDetailProps) {
             <p className="text-muted-foreground">{song.artist}</p>
           )}
         </div>
-        <Button variant="outline" asChild>
-          <Link to="/songs">Back to songs</Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={deleteMutation.isPending}
+          >
+            {deleteMutation.isPending ? "Deleting..." : "Delete"}
+          </Button>
+          <Button variant="outline" asChild>
+            <Link to="/songs">Back to songs</Link>
+          </Button>
+        </div>
       </div>
 
       <Card>

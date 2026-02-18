@@ -12,16 +12,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { useSongsQuery } from "@/hooks/useSongs";
 
 export function SongsList() {
-  const { user, signInMocked } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
   const { data: songs, isLoading, error } = useSongsQuery(user?.uid);
 
-  if (!user) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-4 py-12">
-        <p className="text-muted-foreground">Firebase not configured</p>
-        <Button onClick={signInMocked}>Sign in as mocked user</Button>
-      </div>
-    );
+  if (authLoading) {
+    return <p className="text-muted-foreground py-12 text-center">Loading...</p>;
   }
 
   if (error) {
