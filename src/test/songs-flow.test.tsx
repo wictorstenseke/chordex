@@ -145,7 +145,8 @@ describe("songs flow", () => {
         expect(screen.getByRole("heading", { name: /detail song/i })).toBeInTheDocument();
       });
       expect(screen.getByText(/artist name/i)).toBeInTheDocument();
-      expect(screen.getByText(/\[Verse 1\]/)).toBeInTheDocument();
+      expect(screen.getByLabelText("ChordPro preview")).toBeInTheDocument();
+      expect(screen.getByText(/Lyrics here/)).toBeInTheDocument();
       expect(screen.getByRole("link", { name: /back to songs/i })).toBeInTheDocument();
       expect(screen.getByRole("button", { name: /delete/i })).toBeInTheDocument();
     });

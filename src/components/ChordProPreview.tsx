@@ -49,11 +49,11 @@ const PreviewLine = ({ line }: { line: ParsedLine }) => {
                 <span>{pair.chord}</span>
               ) : null}
               {pair.lyric ? (
-                <span className="invisible whitespace-pre">
+                <span className="invisible whitespace-pre font-normal">
                   {pair.lyric}
                 </span>
               ) : (
-                <span className="invisible whitespace-pre"> </span>
+                <span className="invisible whitespace-pre font-normal"> </span>
               )}
             </span>
           ))}

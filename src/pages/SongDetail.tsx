@@ -25,7 +25,7 @@ export function SongDetail({ songId }: SongDetailProps) {
   const { user, isLoading: authLoading } = useAuth();
   const { data: song, isLoading } = useSongQuery(songId);
   const deleteMutation = useDeleteSongMutation(user?.uid);
-  const [isPreview, setIsPreview] = useState(false);
+  const [isPreview, setIsPreview] = useState(true);
 
   const handleDelete = () => {
     deleteMutation.mutate(songId, {
