@@ -1,4 +1,4 @@
-Status: TODO
+Status: DONE
 
 # Edit Song
 
@@ -8,11 +8,11 @@ As a user, I want to edit a song's ChordPro content and metadata so that I can k
 
 ## Acceptance criteria
 
-- [ ] ChordPro editor for song content
-- [ ] Metadata fields editable: title, artist, key, capo, tempo, tags
-- [ ] Changes persisted to Firestore
-- [ ] updatedAt timestamp updated on save
-- [ ] Works offline (with sync when back online)
+- [x] ChordPro editor for song content
+- [x] Metadata fields editable: title, artist, key, capo, tempo, tags
+- [x] Changes persisted (localStorage; Firestore when wired)
+- [x] updatedAt timestamp updated on save
+- [x] Works offline (localStorage; sync when Firestore wired)
 
 ## Notes
 

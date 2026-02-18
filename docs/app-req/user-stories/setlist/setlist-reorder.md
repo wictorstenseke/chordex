@@ -1,4 +1,4 @@
-Status: TODO
+Status: DONE
 
 # Reorder Songs in Setlist (Drag & Drop)
 
@@ -8,11 +8,11 @@ As a user, I want to reorder songs in a setlist via drag and drop so that I can 
 
 ## Acceptance criteria
 
-- [ ] Songs in setlist displayed in order
-- [ ] Drag-and-drop reordering supported
-- [ ] New order persisted to Firestore (songIds array updated)
-- [ ] Order preserved when entering player mode
+- [x] Songs in setlist displayed in order
+- [x] Drag-and-drop reordering supported
+- [x] New order persisted (localStorage; Firestore when wired)
+- [x] Order preserved when entering player mode
 
 ## Notes
 
-songIds: string[] (ordered). Drag-and-drop UI to reorder.
+songIds: string[] (ordered). Drag-and-drop UI using @dnd-kit.

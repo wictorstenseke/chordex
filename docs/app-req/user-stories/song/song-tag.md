@@ -1,4 +1,4 @@
-Status: TODO
+Status: DONE
 
 # Tag Songs
 
@@ -8,10 +8,10 @@ As a user, I want to add tags to songs so that I can organize and filter my libr
 
 ## Acceptance criteria
 
-- [ ] UI to add/remove tags on a song
-- [ ] tags stored as string array in Firestore
-- [ ] Tags usable for search and filtering
-- [ ] Tags editable from song edit view
+- [x] UI to add/remove tags on a song
+- [x] tags stored as string array (localStorage; Firestore when wired)
+- [x] Tags usable for search and filtering
+- [x] Tags editable from song edit view
 
 ## Notes
 

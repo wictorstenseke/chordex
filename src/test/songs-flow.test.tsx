@@ -182,7 +182,16 @@ describe("songs flow", () => {
         expect(screen.getByRole("heading", { name: /delete me/i })).toBeInTheDocument();
       });
 
-      await user.click(screen.getByRole("button", { name: /delete/i }));
+      const deleteButtons = screen.getAllByRole("button", { name: /delete/i });
+      await user.click(deleteButtons[0]);
+
+      await waitFor(() => {
+        expect(screen.getByRole("alertdialog")).toBeInTheDocument();
+      });
+
+      await user.click(
+        screen.getByRole("button", { name: /^delete$/i })
+      );
 
       await waitFor(() => {
         expect(deleteSong).toHaveBeenCalledWith("song-del");
