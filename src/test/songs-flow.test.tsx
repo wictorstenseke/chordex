@@ -7,6 +7,7 @@ import {
   deleteSong,
   getSong,
   getSongsForUser,
+  updateSong,
 } from "@/lib/songs";
 import { renderAppAt } from "@/test/utils";
 
@@ -27,6 +28,7 @@ vi.mock("@/lib/songs", () => ({
   deleteSong: vi.fn(),
   getSong: vi.fn(),
   getSongsForUser: vi.fn(),
+  updateSong: vi.fn(),
 }));
 
 vi.mock("@/hooks/useAuth", () => ({
@@ -187,6 +189,101 @@ describe("songs flow", () => {
 
       await waitFor(() => {
         expect(router.state.location.pathname).toBe("/songs");
+      });
+    });
+    it("should show edit link on song detail page", async () => {
+      vi.mocked(getSong).mockResolvedValue({
+        id: "song-1",
+        title: "Detail Song",
+        artist: "Artist Name",
+        ownerId: "test-uid",
+        content: "[Verse 1]\nLyrics here",
+        visibility: "private",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      await renderAppAt(["/songs/song-1"]);
+
+      await waitFor(() => {
+        expect(screen.getByRole("heading", { name: /detail song/i })).toBeInTheDocument();
+      });
+      expect(screen.getByRole("link", { name: /edit/i })).toBeInTheDocument();
+    });
+  });
+
+  describe("edit song", () => {
+    it("should show edit form with pre-filled values", async () => {
+      vi.mocked(getSong).mockResolvedValue({
+        id: "song-edit-1",
+        title: "My Song",
+        artist: "My Artist",
+        ownerId: "test-uid",
+        content: "[Verse]\nLyrics",
+        visibility: "private",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      await renderAppAt(["/songs/song-edit-1/edit"]);
+
+      await waitFor(() => {
+        expect(screen.getByText(/edit song/i)).toBeInTheDocument();
+      });
+
+      const titleInput = screen.getByLabelText(/title \(required\)/i);
+      const artistInput = screen.getByLabelText(/artist/i);
+      const contentInput = screen.getByLabelText(/chordpro content/i);
+
+      expect(titleInput).toHaveValue("My Song");
+      expect(artistInput).toHaveValue("My Artist");
+      expect(contentInput).toHaveValue("[Verse]\nLyrics");
+    });
+
+    it("should save changes and navigate to detail page", async () => {
+      vi.mocked(getSong).mockResolvedValue({
+        id: "song-edit-2",
+        title: "Original Title",
+        ownerId: "test-uid",
+        content: "Original content",
+        visibility: "private",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      vi.mocked(updateSong).mockResolvedValue(undefined);
+
+      const user = userEvent.setup();
+      const { router } = await renderAppAt(["/songs/song-edit-2/edit"]);
+
+      await waitFor(() => {
+        expect(screen.getByText(/edit song/i)).toBeInTheDocument();
+      });
+
+      const titleInput = screen.getByLabelText(/title \(required\)/i);
+      await user.clear(titleInput);
+      await user.type(titleInput, "Updated Title");
+
+      await user.click(screen.getByRole("button", { name: /save changes/i }));
+
+      await waitFor(() => {
+        expect(updateSong).toHaveBeenCalledWith("song-edit-2", {
+          title: "Updated Title",
+          content: "Original content",
+        });
+      });
+
+      await waitFor(() => {
+        expect(router.state.location.pathname).toBe("/songs/song-edit-2");
+      });
+    });
+
+    it("should show not found when editing nonexistent song", async () => {
+      vi.mocked(getSong).mockResolvedValue(null);
+
+      await renderAppAt(["/songs/nonexistent/edit"]);
+
+      await waitFor(() => {
+        expect(screen.getByText(/song not found/i)).toBeInTheDocument();
       });
     });
   });

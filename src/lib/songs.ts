@@ -91,6 +91,30 @@ export const getSong = async (
   return found ? toSongWithId(found) : null;
 };
 
+export const updateSong = async (
+  songId: string,
+  input: SongInput
+): Promise<void> => {
+  const songs = readAll();
+  const index = songs.findIndex((s) => s.id === songId);
+  if (index === -1) throw new Error("Song not found");
+
+  songs[index] = {
+    ...songs[index],
+    title: input.title,
+    content: input.content,
+    artist: input.artist,
+    key: input.key,
+    capo: input.capo,
+    tempo: input.tempo,
+    tags: input.tags,
+    visibility: input.visibility ?? songs[index].visibility,
+    updatedAt: new Date().toISOString(),
+  };
+
+  writeAll(songs);
+};
+
 export const deleteSong = async (songId: string): Promise<void> => {
   const songs = readAll().filter((s) => s.id !== songId);
   writeAll(songs);

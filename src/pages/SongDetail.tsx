@@ -62,6 +62,11 @@ export function SongDetail({ songId }: SongDetailProps) {
           )}
         </div>
         <div className="flex gap-2">
+          <Button asChild>
+            <Link to="/songs/$songId/edit" params={{ songId }}>
+              Edit
+            </Link>
+          </Button>
           <Button
             variant="destructive"
             onClick={handleDelete}
@@ -79,7 +84,7 @@ export function SongDetail({ songId }: SongDetailProps) {
         <CardHeader>
           <CardTitle>ChordPro content</CardTitle>
           <CardDescription>
-            Edit song user story will add full ChordPro editor
+            Song content in ChordPro format
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -5,6 +5,7 @@ import {
   deleteSong as deleteSongFn,
   getSong,
   getSongsForUser,
+  updateSong as updateSongFn,
 } from "@/lib/songs";
 
 import type { SongInput } from "@/types/songbook";
@@ -37,6 +38,23 @@ export const useCreateSongMutation = (ownerId: string | undefined) => {
   return useMutation({
     mutationFn: (input: SongInput) => createSongFn(ownerId!, input),
     onSuccess: () => {
+      if (ownerId) {
+        void queryClient.invalidateQueries({ queryKey: songKeys.list(ownerId) });
+      }
+    },
+  });
+};
+
+export const useUpdateSongMutation = (ownerId: string | undefined) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ songId, input }: { songId: string; input: SongInput }) =>
+      updateSongFn(songId, input),
+    onSuccess: (_data, variables) => {
+      void queryClient.invalidateQueries({
+        queryKey: songKeys.detail(variables.songId),
+      });
       if (ownerId) {
         void queryClient.invalidateQueries({ queryKey: songKeys.list(ownerId) });
       }
